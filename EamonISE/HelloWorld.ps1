@@ -8,6 +8,7 @@ workflow HelloWorld
 
     Write-Output ("Hello " + $Name)
 
-    $cred = Get-AutomationPSCredential -Name 'DefaultAzureCredential'
-    $cred
+    $BuildServer = Get-AutomationVariable -Name BuildServer
+    $BuildServer
+
 }
