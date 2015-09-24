@@ -1,4 +1,4 @@
 Workflow TestDraft
 {
-    $a = Get-Date 
+    Get-Date 
 }
