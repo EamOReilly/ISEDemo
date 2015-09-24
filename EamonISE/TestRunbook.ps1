@@ -1,5 +1,5 @@
 Workflow TestRunbook
 {
-    $A = Get-Date
+    Get-Date
 
 }
