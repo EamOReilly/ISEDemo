@@ -1,2 +1,4 @@
-get-date 
-get-date
+workflow TestSync
+{
+    get-date
+}
