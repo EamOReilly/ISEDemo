@@ -1,0 +1,22 @@
+{
+  "Variable": [
+    {
+      "Value": "\\\\build-server\\server",
+      "Encrypted": false,
+      "Name": "BuildServer",
+      "LastModified": "2015-08-13 14:59:37Z"
+    },
+    {
+      "Value": "{\"Branch\":\"master\",\"RunbookFolderPath\":\"/EamonISE\",\"ProviderType\":1,\"Repository\":\"ISEDemo\",\"Username\":\"EamOReilly\"}",
+      "Encrypted": false,
+      "Name": "Microsoft.Azure.Automation.SourceControl.Connection",
+      "LastModified": "2015-08-13 10:48:19Z"
+    },
+    {
+      "Value": "a0968138-bb95-4d6e-8e83-ddb706025359",
+      "Encrypted": false,
+      "Name": "SubscriptionID",
+      "LastModified": "2015-08-21 19:08:25Z"
+    }
+  ]
+}

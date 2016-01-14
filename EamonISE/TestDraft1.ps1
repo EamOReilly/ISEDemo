@@ -1,4 +1,4 @@
-﻿Workflow TestDraft1
+Workflow TestDraft1
 {
     Get-Date 
 }
