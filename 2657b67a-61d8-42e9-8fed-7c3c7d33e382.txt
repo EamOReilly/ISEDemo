@@ -1,0 +1,135 @@
+{
+    "$schema": "http://schemas.microsoft.org/azure/deploymentTemplate?api-version=2015-01-01#",
+    "contentVersion": "1.0",
+    "parameters": {
+        "accountName": {
+            "type": "string",
+            "defaultValue": "TestBackup",
+            "metadata": {
+                "description": "The name of the Automation account to use."
+            }
+        },
+        "location": {
+            "type": "string",
+            "allowedValues": [
+                "Japan East",
+                "East US 2",
+                "West Europe",
+                "Southeast Asia",
+                "South Central US"
+            ],
+            "defaultValue": "East US 2",
+            "metadata": {
+                "description": "The region to deploy the Automation account in."
+            }
+        },
+        "scheduleName": {
+            "type": "string",
+            "defaultValue": "DailyVmBackupSchedule",
+            "metadata": {
+                "description": "The name of the schedule."
+            }
+        },
+        "scheduleStartTime": {
+            "type": "string",
+            "defaultValue": "12/30/2016 12:00:00",
+            "metadata": { 
+                "description":  "The time for the schedule to start.  This time must be at least 5 minutes ahead of the current time"
+            }
+        }
+    },
+    "variables": {
+        "pricingTier": "Free",
+        "frequency": "day",
+        "runbookPublishedName": "AutoBackupVM",
+        "runbookPublishedURI": "https://bethstorageacct.blob.core.windows.net/bethcontainer/AutoBackupVM.ps1",
+        "scheduleGuid":  "2657b67a-61d8-42e9-8fed-7c3c7d33e382"
+    },
+        "resources": [
+            {
+                "name": "[parameters('accountName')]",
+                "type": "Microsoft.Automation/automationAccounts",
+                "apiVersion": "2015-01-01-preview",
+                "location": "[parameters('location')]",
+                "dependsOn": [
+                ],
+                "tags": {
+                    "key": "value"
+                },
+                "properties": {
+                    "comment": "",
+                    "sku": {
+                        "name": "[variables('pricingTier')]"
+                    }
+                },
+                "resources": [
+                    {
+                        "name": "[variables('runbookPublishedName')]",
+                        "type": "runbooks",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+                        ],
+                        "tags": {
+                        },
+                        "properties": {
+                            "runbookType": "PowerShell",
+                            "logProgress": "false",
+                            "logVerbose": "false",
+                            "description": "This runbook backs up your Virtual Machines.",
+                            "publishContentLink": {
+                                "uri": "[variables('runbookPublishedURI')]",
+                                "version": "1.0.0.0"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('scheduleName')]",
+                        "type": "schedules",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+                        ],
+                        "tags": {
+                        },
+                        "properties": {
+                            "description": "Daily schedule to backup VMs",
+                            "startTime": "[parameters('scheduleStartTime')]",
+                            "isEnabled": "true",
+                            "interval": "1",
+                            "frequency":  "[variables('frequency')]"
+                        }
+                    },
+
+                    {
+                        "name": "[variables('scheduleGuid')]",
+                        "type": "jobSchedules",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),  '/runbooks/', variables('runbookPublishedName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'), '/schedules/', parameters('scheduleName'))]"
+                        ],
+                        "tags": {
+                        },
+                        "properties": {
+                            "schedule": {
+                                "name": "[parameters('scheduleName')]"
+                            },
+                            "runbook": {
+                                "name": "[ variables('runbookPublishedName')]"
+                            }
+                        }
+                    }
+                               
+
+                ]
+            }
+        ],
+
+        "outputs": {
+        }
+    }
