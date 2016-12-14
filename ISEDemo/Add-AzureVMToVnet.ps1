@@ -2,7 +2,6 @@
 .SYNOPSIS
    Creates four Windows Server 2012 Virtual Machines across two separate cloud services and 
    adds them to the same virtual network.
-   Test
 .DESCRIPTION
    If the virtual network indicated does not exist then it is created.  The user is prompted 
    for administrator credentials which can be used to logon to the virtual machines.  This script
